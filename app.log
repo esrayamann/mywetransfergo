@@ -1,0 +1,34 @@
+✅ DB bağlantısı başarılı
+[GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
+
+[GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
+ - using env:	export GIN_MODE=release
+ - using code:	gin.SetMode(gin.ReleaseMode)
+
+[GIN-debug] Loaded HTML Templates (6): 
+	- 
+	- admin.html
+	- base.html
+	- dashboard.html
+	- login.html
+	- register.html
+
+[GIN-debug] GET    /health                   --> mywetransfergo/routes.HealthCheck (3 handlers)
+[GIN-debug] POST   /upload                   --> mywetransfergo/routes.UploadFile (3 handlers)
+[GIN-debug] GET    /download/:id             --> mywetransfergo/routes.DownloadFile (3 handlers)
+[GIN-debug] POST   /send-email               --> mywetransfergo/routes.SendFileEmail (3 handlers)
+[GIN-debug] POST   /send-file                --> mywetransfergo/routes.SendFileEmail (3 handlers)
+[GIN-debug] GET    /login                    --> mywetransfergo/routes.ShowLoginPage (3 handlers)
+[GIN-debug] POST   /login                    --> mywetransfergo/routes.Login (3 handlers)
+[GIN-debug] GET    /register                 --> mywetransfergo/routes.ShowRegisterPage (3 handlers)
+[GIN-debug] POST   /register                 --> mywetransfergo/routes.Register (3 handlers)
+[GIN-debug] GET    /logout                   --> mywetransfergo/routes.Logout (3 handlers)
+[GIN-debug] GET    /dashboard                --> mywetransfergo/routes.Dashboard (3 handlers)
+[GIN-debug] POST   /buy-premium              --> mywetransfergo/routes.BuyPremium (3 handlers)
+[GIN-debug] GET    /base                     --> main.main.func1 (3 handlers)
+[GIN-debug] GET    /admin                    --> mywetransfergo/routes.AdminPage (3 handlers)
+[GIN-debug] POST   /change-role              --> mywetransfergo/routes.ChangeUserRole (3 handlers)
+2025/08/14 16:48:58 Server çalışıyor port: 8081
+[GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
+Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
+[GIN-debug] Listening and serving HTTP on :8081
