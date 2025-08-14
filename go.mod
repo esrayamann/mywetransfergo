@@ -2,9 +2,9 @@ module mywetransfergo
 
 go 1.24
 
-require gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
-
 require (
+	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
+
 	github.com/bytedance/sonic v1.11.6 // indirect
 	github.com/bytedance/sonic/loader v0.1.1 // indirect
 	github.com/cloudwego/base64x v0.1.4 // indirect
@@ -44,3 +44,5 @@ require (
 	gorm.io/driver/postgres v1.6.0 // indirect
 	gorm.io/gorm v1.30.1 // indirect
 )
+
+replace github.com/fatih/camelcase => github.com/fatih/camelcase v1.0.0
