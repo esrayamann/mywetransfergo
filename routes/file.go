@@ -69,5 +69,9 @@ func DownloadFile(c *gin.Context) {
 		return
 	}
 
+	// Dosya indirme header'ı ekle
+	c.Header("Content-Disposition", "attachment; filename="+file.Filename)
+	c.Header("Content-Type", "application/octet-stream")
+
 	c.File(file.Path)
 }
