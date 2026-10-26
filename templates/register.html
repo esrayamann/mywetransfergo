@@ -21,15 +21,15 @@
     <form method="POST" action="/register">
         <div class="mb-3">
             <label class="form-label">Kullanıcı Adı</label>
-            <input type="text" class="form-control" name="username" value="{{.Username}}" required>
+            <input type="text" class="form-control" name="username" value="{{.Username}}" minlength="3" maxlength="40" autocomplete="username" required>
         </div>
         <div class="mb-3">
             <label class="form-label">E-posta</label>
-            <input type="email" class="form-control" name="email" value="{{.Email}}" required>
+            <input type="email" class="form-control" name="email" value="{{.Email}}" autocomplete="email" required>
         </div>
         <div class="mb-3">
             <label class="form-label">Şifre</label>
-            <input type="password" class="form-control" name="password" required>
+            <input type="password" class="form-control" name="password" minlength="10" autocomplete="new-password" required>
         </div>
         <button type="submit" class="btn btn-success w-100">Kayıt Ol</button>
     </form>

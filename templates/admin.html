@@ -14,7 +14,10 @@
         <a class="navbar-brand" href="/dashboard">MyWeTransferGo</a>
         <div>
             <span class="text-white me-3">Hoşgeldin, {{.Username}}</span>
-            <a href="/logout" class="btn btn-outline-light btn-sm">Çıkış Yap</a>
+            <form action="/logout" method="post" class="d-inline">
+                <input type="hidden" name="_csrf" value="{{.CSRFToken}}">
+                <button type="submit" class="btn btn-outline-light btn-sm">Çıkış Yap</button>
+            </form>
         </div>
     </div>
 </nav>
@@ -66,6 +69,7 @@
                         <td>
                             <form action="/change-role" method="POST" style="display:inline;">
                                 <input type="hidden" name="id" value="{{.ID}}">
+                                <input type="hidden" name="_csrf" value="{{$.CSRFToken}}">
                                 <button class="btn btn-sm btn-warning">Rolü Değiştir</button>
                             </form>
                         </td>

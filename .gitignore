@@ -1,0 +1,18 @@
+# Local configuration
+.env
+.env.*
+!.env.example
+
+# Runtime files
+uploads/*
+!uploads/.gitkeep
+app
+app.log
+coverage.out
+
+# Go tooling caches and binaries
+bin/
+pkg/
+
+# OS files
+.DS_Store

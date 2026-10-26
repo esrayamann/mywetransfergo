@@ -5,17 +5,18 @@ import (
 	"mywetransfergo/config"
 	"mywetransfergo/models"
 	"mywetransfergo/routes"
-	"net/http"
-
 	"os"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	// Ortam değişkenlerini yükle
-	config.LoadEnv()
-	config.ConnectDB()
+	if err := config.LoadEnv(); err != nil {
+		log.Fatal("Uygulama yapılandırması geçersiz:", err)
+	}
+	if err := config.ConnectDB(); err != nil {
+		log.Fatal(err)
+	}
 
 	// DB migrate
 	err := config.DB.AutoMigrate(&models.User{}, &models.File{})
@@ -23,40 +24,39 @@ func main() {
 		log.Fatal("DB migrate hatası:", err)
 	}
 
-	r := gin.Default()
+	r := gin.New()
+	r.Use(gin.Logger(), gin.Recovery(), routes.SecurityHeaders())
 	r.LoadHTMLGlob("templates/*")
+	r.MaxMultipartMemory = config.App.MaxUploadBytes
 
-	// Endpointler
+	r.GET("/", routes.Home)
 	r.GET("/health", routes.HealthCheck)
-	r.POST("/upload", routes.UploadFile)
 	r.GET("/download/:id", routes.DownloadFile)
-	r.POST("/send-email", routes.SendFileEmail)
-	r.POST("/send-file", routes.SendFileEmail)
 
-	// Login & Register
-	r.GET("/login", routes.ShowLoginPage)       // Login sayfası göster
-	r.POST("/login", routes.Login)              // Login işlemi
-	r.GET("/register", routes.ShowRegisterPage) // Register sayfası göster
-	r.POST("/register", routes.Register)        // Register işlemi
-	r.GET("/logout", routes.Logout)
-	r.GET("/dashboard", routes.Dashboard)
-	r.POST("/buy-premium", routes.BuyPremium)
-	r.GET("/base", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "base.html", gin.H{
-			"Error":   "",
-			"Success": "",
-		})
-	})
-	r.GET("/admin", routes.AdminPage)
-	r.POST("/change-role", routes.ChangeUserRole)
+	r.GET("/login", routes.ShowLoginPage)
+	r.POST("/login", routes.Login)
+	r.GET("/register", routes.ShowRegisterPage)
+	r.POST("/register", routes.Register)
 
-	// Port ayarı (nginx için 3000 yapıyoruz)
+	protected := r.Group("/")
+	protected.Use(routes.RequireUser)
+	protected.GET("/dashboard", routes.Dashboard)
+	protected.POST("/logout", routes.RequireCSRF, routes.Logout)
+	protected.POST("/upload", routes.RequireCSRF, routes.UploadFile)
+	protected.POST("/send-file", routes.RequireCSRF, routes.SendFileEmail)
+	protected.POST("/buy-premium", routes.RequireCSRF, routes.BuyPremium)
+
+	admin := r.Group("/")
+	admin.Use(routes.RequireAdmin)
+	admin.GET("/admin", routes.AdminPage)
+	admin.POST("/change-role", routes.RequireCSRF, routes.ChangeUserRole)
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8081"
 	}
 
-	log.Println("Server çalışıyor port:", port)
+	log.Println("Sunucu dinleniyor:", port)
 	if err := r.Run(":" + port); err != nil {
 		log.Fatal("Sunucu başlatılamadı:", err)
 	}

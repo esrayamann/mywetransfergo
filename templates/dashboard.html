@@ -10,10 +10,13 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
-        <a class="navbar-brand" href="/">MyWeTransferGo</a>
+        <a class="navbar-brand" href="/dashboard">MyWeTransferGo</a>
         <div>
             <span class="text-white me-3">Hoşgeldin, {{.Username}}</span>
-            <a href="/logout" class="btn btn-outline-light btn-sm">Çıkış Yap</a>
+            <form action="/logout" method="post" class="d-inline">
+                <input type="hidden" name="_csrf" value="{{.CSRFToken}}">
+                <button type="submit" class="btn btn-outline-light btn-sm">Çıkış Yap</button>
+            </form>
         </div>
     </div>
 </nav>
@@ -36,6 +39,7 @@
             {{else}}
                 <p class="text-muted">Şu anda Premium üye değilsiniz.</p>
                 <form action="/buy-premium" method="post">
+                    <input type="hidden" name="_csrf" value="{{.CSRFToken}}">
                     <button type="submit" class="btn btn-warning">💎 Premium Satın Al</button>
                 </form>
             {{end}}
@@ -48,25 +52,23 @@
             <h4 class="card-title mb-3">Dosya Gönder</h4>
             <form action="/send-file" method="post" enctype="multipart/form-data">
                 <div class="mb-3">
-                    <label class="form-label">Gönderen E-posta</label>
-                    <input type="email" class="form-control" name="sender_email" required>
-                </div>
-                <div class="mb-3">
                     <label class="form-label">Alıcı E-posta</label>
-                    <input type="email" class="form-control" name="receiver_email" required>
+                    <input type="email" class="form-control" name="receiver_email" autocomplete="email" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Konu</label>
-                    <input type="text" class="form-control" name="subject" required>
+                    <input type="text" class="form-control" name="subject" maxlength="160" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Mesaj</label>
-                    <textarea class="form-control" name="body" rows="3" required></textarea>
+                    <textarea class="form-control" name="body" rows="3" maxlength="3000"></textarea>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Dosya</label>
                     <input type="file" class="form-control" name="file" required>
+                    <div class="form-text">En fazla 25 MB. Gönderen adresi olarak {{.Email}} kullanılır.</div>
                 </div>
+                <input type="hidden" name="_csrf" value="{{.CSRFToken}}">
                 <button type="submit" class="btn btn-primary">📤 Dosyayı Gönder</button>
             </form>
         </div>
